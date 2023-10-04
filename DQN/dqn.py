@@ -74,7 +74,7 @@ class DQN:
             Adam optimizer learning rate.
         """
 
-        self.obs_dim = 6
+        self.obs_dim = 4
         self.act_dim = 2
         self.replay_buffer = ReplayBuffer(replay_size)
         self.sync_after = sync_after
@@ -97,7 +97,6 @@ class DQN:
         int
             The action to be taken.
         """
-        #print(epsilon)
         # Implement epsilon-greedy action selection
         if random.random() > epsilon:
             state = torch.FloatTensor(state).unsqueeze(0)  # inserts empty first dimension for potential batch-processing
@@ -131,17 +130,14 @@ class DQN:
 
         # Select Q-values of actions actually taken -> shape (batch_size)
         q_values = q_values.gather(1, torch.LongTensor(actions).unsqueeze(1)).squeeze(1)
-        # Calculate max over next Q-values
         next_q_values = next_q_values.max(1)[0]
 
-        # The target we want to update our network towards
+        # The target to update our network towards
         expected_q_values = torch.Tensor(rewards) + self.gamma * (1.0 - torch.Tensor(terminated)) * next_q_values
 
-        # Calculate loss
         loss = F.mse_loss(q_values, expected_q_values)
         return loss
 
-    #performs way better at 0.5 epsilon start than 1.0 epsilon start, very intresting 
     def epsilon_by_timestep(self, timestep, epsilon_start=0.05, epsilon_final=0.01, frames_decay=10000):
         """Linearly decays epsilon from epsilon_start to epsilon_final in frames_decay timesteps"""
         # Implement epsilon decay function
