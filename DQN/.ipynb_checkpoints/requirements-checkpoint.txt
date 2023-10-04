@@ -1,7 +1,0 @@
-torch
-gymnasium
-ale-py
-atari-py
-matplotlib
-pyglet
-tqdm
