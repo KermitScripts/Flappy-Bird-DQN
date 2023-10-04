@@ -1,0 +1,5 @@
+Having seen the relative success of evolutionary algorithms applied to Flappy Bird (https://www.youtube.com/watch?v=WSW-5m8lRMs&t=234s&ab_channel=CodeBullet) I went about seeing how Deep Q-learning, a model free reinfocment 
+learning algorithm, would cope with learning Flappy Bird. The agent knows the distance to the pipes horizontally, the distance to the bottom of the top pipe and the top of the bottom pipe and its own vertical velocity. 
+I trained the network for 10000 cycles with an almost 0 epsilon exploration. Interestingly, the agent performed better on a much lower eplsilon exploration than a higher exploration quota. 
+In the current version of the model, the agent can pass about 11/12 pipes on a good run. Sadly, it doesn't train as quickly or work as well as an evolutionary approach. 
+It will still bump into pipes and drop or rise to the ground or ceiling at times. All this can probably be improved on by using more state of the art RL techniques such as proximal policy optimisation, but this is a project for the future. 
