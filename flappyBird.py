@@ -6,7 +6,6 @@ from pygame.locals import *
 import pygame.draw
 from DQN.dqn import *
 from DQN.helper import *
-import pdb;
 
 # VARIABLES
 SCREEN_WIDTH = 400
@@ -88,7 +87,7 @@ class Score(pygame.sprite.Sprite):
         self.score = 0
         self.image = pygame.Surface((100, 40), pygame.SRCALPHA) 
         self.rect = self.image.get_rect()
-        self.rect.center = (SCREEN_WIDTH // 2, 30)  # Adjust the position as needed
+        self.rect.center = (SCREEN_WIDTH // 2, 30) 
 
         # Clear the score surface with a transparent background only once
         self.image.fill((0, 0, 0, 0))
@@ -153,14 +152,11 @@ class FlappyBirdGame:
         pipe_bottom_y = pipe.rect.top
         pipe_top_y = pipe_bottom_y - PIPE_GAP 
 
-        #distance_to_top_pipe = math.sqrt((bird_center_x-pipe_center_x)**2 + (bird_center_y-pipe_top_y)**2)
-        #distance_to_bottom_pipe = math.sqrt((bird_center_x-pipe_center_x)**2 + (bird_center_y-pipe_bottom_y)**2)
-
         distance_to_pipe = pipe.rect.left - bird.rect.right
         distance_to_top_pipe = bird_center_y - pipe_top_y
         distance_to_bottom_pipe = pipe_bottom_y - bird_center_y
 
-        # Draw lines to visualize the distances
+        # Draw lines to visualize the distances for debug purposes
         #pygame.draw.line(self.screen, (255, 0, 0), (bird_center_x, bird_center_y), (bird_center_x, pipe_top_y), 2) 
         #pygame.draw.line(self.screen, (0, 255, 0), (bird_center_x, bird_center_y), (bird_center_x, pipe_bottom_y), 2)
         #pygame.display.update()
@@ -183,16 +179,12 @@ class FlappyBirdGame:
 
             self.restart()
             bird = self.bird_group.sprites()[0]
-            bird_y_velocity = bird.speed
-
-            distance_to_floor =  SCREEN_HEIGHT - bird.rect.bottom
-            distance_to_celling = bird.rect.top
-            
+            bird_y_velocity = bird.speed           
             
             pipe = self.find_closest_pipe(bird)
             distance_to_pipe, distance_to_top_pipe, distance_to_bottom_pipe = self.distance_to_pipe(bird, pipe)       
             
-            obs = [bird_y_velocity, distance_to_pipe, distance_to_top_pipe, distance_to_bottom_pipe, distance_to_floor, distance_to_celling]
+            obs = [bird_y_velocity, distance_to_pipe, distance_to_top_pipe, distance_to_bottom_pipe]
             reward = 0
             terminated = False
             counter = 0
@@ -237,14 +229,11 @@ class FlappyBirdGame:
                 bird = self.bird_group.sprites()[0]
                 bird_y_velocity = bird.speed
                 bird_x_position = bird.rect[0]
-
-                distance_to_floor =  SCREEN_HEIGHT - bird.rect.bottom
-                distance_to_celling = bird.rect.top
         
                 pipe = self.find_closest_pipe(bird)
                 distance_to_pipe, distance_to_top_pipe, distance_to_bottom_pipe = self.distance_to_pipe(bird, pipe)  
 
-                next_obs = [bird_y_velocity, distance_to_pipe, distance_to_top_pipe, distance_to_bottom_pipe, distance_to_floor, distance_to_celling]
+                next_obs = [bird_y_velocity, distance_to_pipe, distance_to_top_pipe, distance_to_bottom_pipe]
 
                 if self.check_collision(bird):
                     reward += -10
